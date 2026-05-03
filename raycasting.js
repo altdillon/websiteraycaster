@@ -16,7 +16,7 @@
     [1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -33,6 +33,10 @@
         py: 100,
     }
 
+    let globalConsts = {
+        ambiantlight: 4.0
+    }
+
     let canvasstate = {}
 
     // basicly init everything and start the draw loop
@@ -45,16 +49,40 @@
         draw()
     })
 
-    function colormap(ctx,ncolor){
+    function colormap(ctx,ncolor,brightness=0){
 
-        if(ncolor == 1){
-            ctx.fillStyle = 'blue'
-        } else if(ncolor == 2){
-            ctx.fillStyle = 'red'
-        } else if(ncolor == 3){
-            ctx.fillStyle = 'green'
-        } else if(ncolor == 4) {
-            ctx.fillStyle = 'yellow'
+        if(brightness == 0){
+            if(ncolor == 1){
+                ctx.fillStyle = 'blue'
+            } else if(ncolor == 2){
+                ctx.fillStyle = 'red'
+            } else if(ncolor == 3){
+                ctx.fillStyle = 'green'
+            } else if(ncolor == 4) {
+                ctx.fillStyle = 'yellow'
+            }
+        } else {
+            let R,G,B
+            if(ncolor == 1){
+                // blue
+                R = 0
+                G = 0
+                B = 255
+            } else if(ncolor == 2){
+                // red
+                R = 255
+                G = 0
+                B = 0
+            } else if(ncolor == 3){
+                R = 0
+                G = 255
+                B = 0
+            } else if(ncolor == 4){
+                R = 255
+                G = 255
+                B = 0
+            }
+            ctx.fillStyle = `rgb(${Math.floor(R*brightness)}, ${Math.floor(G*brightness)}, ${Math.floor(B*brightness)})`
         }
     }
 
@@ -83,7 +111,8 @@
             if(!rays[n]) {continue}
          
             let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
-            colormap(ctx,rays[n].color_code)
+            let shadedist = Math.min(globalConsts.ambiantlight,globalConsts.ambiantlight / rays[n].perp_dist) 
+            colormap(ctx,rays[n].color_code,shadedist)
 
             let rect_top = SCREEN_HEIGHT/2 - stripHeight/2
             let rect_bottom = SCREEN_HEIGHT/2 + stripHeight/2
