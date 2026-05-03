@@ -118,7 +118,15 @@
          
             let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
             let shadedist = Math.min(globalConsts.ambiantlight,globalConsts.ambiantlight / rays[n].perp_dist) 
-            colormap(ctx,rays[n].color_code,shadedist)
+           
+            // test the side detection by changing colors on some of the sides
+            if(rays[n].side == 0){
+                colormap(ctx,rays[n].color_code,shadedist)
+            } else if(rays[n].side == 1){
+                colormap(ctx,rays[n].color_code+1,shadedist)
+            }
+
+            // colormap(ctx,rays[n].color_code,shadedist)
 
             let rect_top = SCREEN_HEIGHT/2 - stripHeight/2
             let rect_bottom = SCREEN_HEIGHT/2 + stripHeight/2
