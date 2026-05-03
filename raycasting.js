@@ -305,13 +305,6 @@
 
     function draw(){
 
-        if(keys['x']){
-            setTimeout(() =>{
-                if(keys['x']){
-                    drawFPV = ~drawFPV
-                }
-            },10)
-        }
 
         // rotate
         if(keys['a']){
