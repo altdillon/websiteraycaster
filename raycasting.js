@@ -209,7 +209,7 @@
         let dtheta = player.fov / nrays
         //let theta = angle
         let n = 0 
-        for(let theta = start_angle;theta < (stop_angle-0.1);theta+=dtheta){
+        for(let theta = start_angle;theta < (stop_angle);theta+=dtheta){
             // let vertX = x + rayLength * Math.cos(theta)
             // let vertY = y + rayLength * Math.sin(theta)
 
