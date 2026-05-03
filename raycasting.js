@@ -2,8 +2,8 @@
 
 
     const grid = [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1],
+    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -59,7 +59,7 @@
     }
 
     function drawWorld3D(ctx,rays,map){
-        const SCALE_fACTOR = 60.0
+        const SCALE_fACTOR = 1.0
         const rows = map.length        // 20
         const cols = map[0].length     // 20
         let boxSideX = window.innerWidth / cols
@@ -67,15 +67,22 @@
         const SCREEN_WIDTH = window.innerWidth
         const SCREEN_HEIGHT = window.innerHeight
         const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) * SCALE_fACTOR
+       
+       
+        // ceiling
+        ctx.fillStyle = 'black'
+        ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2)
+
+        // floor
+        ctx.fillStyle = 'grey'
+        ctx.fillRect(0, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT/2) 
+       
         for(let n=0;n<rays.length;n++){
             //debugger
+             
             if(!rays[n]) {continue}
+         
             let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
-            // let rect_posX = n * SCREEN_WIDTH / rays.length
-            // let rect_top = SCREEN_HEIGHT/2 - rect_height/2
-            // let rect_bottom = SCREEN_HEIGHT/2 + rect_height/2
-
-
             colormap(ctx,rays[n].color_code)
 
             let rect_top = SCREEN_HEIGHT/2 - stripHeight/2
@@ -246,7 +253,7 @@
                 // debugger 
                 if(map[gridX][gridY] > 0){
                     // find the magnitude of the stop
-                    radial_dist = Math.sqrt(ddaX*ddaX + ddaY*ddaY)
+                    radial_dist = Math.sqrt(ddaX*ddaX + ddaY*ddaY) / boxSideX
                     perp_dist = radial_dist * Math.cos(theta - player.angle) // cos correction for fish eye
                     color_code = map[gridX][gridY]
                     hits[n] = {perp_dist,color_code}
@@ -280,7 +287,7 @@
         keys[e.key] = false
     })
 
-    const NUM_RAWS = 201
+    const NUM_RAWS = 1001
     const STEP_DDA = 2
     const DELTA_THETA = 0.1
     const ds = 4
