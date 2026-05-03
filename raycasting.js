@@ -87,7 +87,7 @@
 
             let rect_top = SCREEN_HEIGHT/2 - stripHeight/2
             let rect_bottom = SCREEN_HEIGHT/2 + stripHeight/2
-            let stripWidth = SCREEN_WIDTH / rays.length
+            let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
             let stripX = n * stripWidth
             ctx.fillRect(stripX, rect_top, stripWidth, stripHeight)   // draw the top rect
         }
