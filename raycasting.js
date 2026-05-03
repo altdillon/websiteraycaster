@@ -284,7 +284,20 @@
                         side = 1 // ray crossed into a horizontal line
                     }
 
-                    hits[n] = {perp_dist,color_code,side}
+                    // find hitX,hitY, wallX
+                    // wallX is needed to find which slice of a texture we're using
+                    //let hitX,hitY
+                    let wallX
+                    // do the compute
+                    if(side == 0){
+                       let hitY = y + ddaY
+                       wallX = (hitY / boxSideY) % 1.0
+                    } else if(side == 1){
+                       let hitX = x + ddaX
+                       wallX = (hitX / boxSideX) % 1.0
+                    }
+
+                    hits[n] = {perp_dist,color_code,side,wallX}
                     break
                 } else {
                     if(draw2Dlines){
