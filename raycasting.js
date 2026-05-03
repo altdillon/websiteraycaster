@@ -262,7 +262,15 @@
                     radial_dist = Math.sqrt(ddaX*ddaX + ddaY*ddaY) / boxSideX
                     perp_dist = radial_dist * Math.cos(theta - player.angle) // cos correction for fish eye
                     color_code = map[gridX][gridY]
-                    hits[n] = {perp_dist,color_code}
+                    // compute if the hit was on a horizontal or vertical side
+                    let side
+                    if(gridX !== oldGridX){
+                        side = 0 // ray costed into a verticle line
+                    } else {
+                        side = 1 // ray crossed into a horizontal line
+                    }
+
+                    hits[n] = {perp_dist,color_code,side}
                     break
                 } else {
                     if(draw2Dlines){
