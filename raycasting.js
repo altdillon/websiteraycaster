@@ -277,22 +277,41 @@
         return hits // array of how amy rays where cased
     }
 
+
+    let drawFPV = false
+
     // Register global listeners
     window.addEventListener('keydown', (e) => {
         console.log(`Key pressed: ${e.key}`); // e.g., "ArrowUp", "w"
         keys[e.key] = true
+    
+        // special ahdnle for drawFPV
+        if(e.key == 'x' && e.repeat == false){
+            drawFPV = ~drawFPV
+        }
     });
 
     window.addEventListener('keyup',(e) => {
         keys[e.key] = false
     })
 
+    
+
     const NUM_RAWS = 1001
     const STEP_DDA = 2
     const DELTA_THETA = 0.1
     const ds = 4
+    let drawFPV_Last_value = true
 
     function draw(){
+
+        if(keys['x']){
+            setTimeout(() =>{
+                if(keys['x']){
+                    drawFPV = ~drawFPV
+                }
+            },10)
+        }
 
         // rotate
         if(keys['a']){
@@ -315,7 +334,6 @@
 
         canvasstate.ctx.clearRect(0, 0, canvasstate.canvas.width, canvasstate.canvas.height); // blank out the frame
         // 2d View of the player
-        let drawFPV = true
         if(!drawFPV){
             drawPlayer2D(canvasstate.ctx,player.px,player.py,player.angle)
             rayCast(canvasstate.ctx,grid,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
