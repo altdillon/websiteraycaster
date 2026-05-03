@@ -106,16 +106,17 @@
                 let boxX = x * boxSideX
                 let boxY = y * boxSideY
                 if(mapworld[x][y] > 0){
-                    if(mapworld[x][y] == 1){
-                        ctx.fillStyle = 'blue'
-                    } else if(mapworld[x][y] == 2){
-                        ctx.fillStyle = 'red'
-                    } else if(mapworld[x][y] == 3){
-                        ctx.fillStyle = 'green'
-                    } else if(mapworld[x][y] == 4) {
-                        ctx.fillStyle = 'yellow'
-                    }
-
+                    // if(mapworld[x][y] == 1){
+                    //     ctx.fillStyle = 'blue'
+                    // } else if(mapworld[x][y] == 2){
+                    //     ctx.fillStyle = 'red'
+                    // } else if(mapworld[x][y] == 3){
+                    //     ctx.fillStyle = 'green'
+                    // } else if(mapworld[x][y] == 4) {
+                    //     ctx.fillStyle = 'yellow'
+                    // }
+                    colormap(ctx,mapworld[x][y])
+                    
                     ctx.fillRect(boxX,boxY,boxSideX,boxSideY)
                 }
             }
