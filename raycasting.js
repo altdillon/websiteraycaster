@@ -60,6 +60,8 @@
                 ctx.fillStyle = 'green'
             } else if(ncolor == 4) {
                 ctx.fillStyle = 'yellow'
+            } else if(ncolor == 5) {
+                ctx.fillStyle = 'purple'
             }
         } else {
             let R,G,B
@@ -81,6 +83,10 @@
                 R = 255
                 G = 255
                 B = 0
+            } else if(ncolor == 5){
+                R = 128
+                G = 0
+                B = 128
             }
             ctx.fillStyle = `rgb(${Math.floor(R*brightness)}, ${Math.floor(G*brightness)}, ${Math.floor(B*brightness)})`
         }
