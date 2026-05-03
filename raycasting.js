@@ -240,36 +240,12 @@
         //let theta = angle
         let n = 0 
         for(let theta = start_angle;theta < (stop_angle);theta+=dtheta){
-            // let vertX = x + rayLength * Math.cos(theta)
-            // let vertY = y + rayLength * Math.sin(theta)
 
-            // // draw the line
-            // ctx.beginPath()
-            // ctx.moveTo(x,y)
-            // ctx.lineTo(vertX,vertY)
-            // ctx.closePath()
-            // //ctx.strokeStyle = `rgb(${n}, ${n}, ${n})`
-            // ctx.stroke()
-
-            // n = n + 1
-      
-            // ray = castRay(map,x,y,theta,boxSideX,boxSideY)          
-            // let vertX = x + ray["perpDist"] * Math.cos(theta) * boxSideX
-            // let vertY = y + ray["perpDist"] * Math.sin(theta) * boxSideY
-            // let hitPixelX = (ray.mapX) * boxSideX
-            // let hitPixelY = (ray.mapY) * boxSideY
-
-
-            // // draw the line
-            // ctx.beginPath()
-            // ctx.moveTo(x,y)
-            // ctx.lineTo(hitPixelX,hitPixelY)
-            // ctx.closePath()
-            // //ctx.strokeStyle = `rgb(${n}, ${n}, ${n})`
-            // ctx.stroke()
 
 
         // ***********************************************************************
+            let oldGridX = Math.floor(x / boxSideX)
+            let oldGridY = Math.floor(y / boxSideY)
             nddas = rayLength / dda
             for(let i=1;i<nddas;i++){
                 let dx = dda * Math.cos(theta)
@@ -297,6 +273,8 @@
                         ctx.stroke()
                     }
                 }
+                oldGridX = gridX
+                oldGridY = gridY
             }
             n++
         }
