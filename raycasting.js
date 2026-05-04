@@ -24,6 +24,22 @@
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     ]
 
+    let texttures = []
+    function generateTextures(){
+        let canvas = document.createElement('canvas')
+        canvas.width = 64
+        canvas.height = 64
+        let ctx = canvas.getContext('2d')
+        for(let x=0;x<64;x+=8){
+            for(let y=0;y<64;y+=6){
+                ctx.fillRect(x,y,6,4)
+                ctx.fillStyle = 'black'
+            }
+        }
+        texttures['brick'] = canvas
+    }
+
+
     let keys = []
 
     let player ={
@@ -62,6 +78,8 @@
                 ctx.fillStyle = 'yellow'
             } else if(ncolor == 5) {
                 ctx.fillStyle = 'purple'
+            } else if(ncolor == 6) {
+
             }
         } else {
             let R,G,B
@@ -87,6 +105,8 @@
                 R = 128
                 G = 0
                 B = 128
+            } else if(ncolor == 6){
+
             }
             ctx.fillStyle = `rgb(${Math.floor(R*brightness)}, ${Math.floor(G*brightness)}, ${Math.floor(B*brightness)})`
         }
