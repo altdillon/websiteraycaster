@@ -14,11 +14,11 @@
     [1,0,0,0,0,0,0,0,0,3,2,3,0,0,0,0,0,0,0,1],
     [1,0,0,4,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
     [1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,1],
+    [1,0,0,1,3,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
+    [1,0,0,4,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,2,0,0,0,0,6,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
+    [1,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,0,0,0,0,4,0,4,0,0,0,0,0,0,0,0,0,0,0,1],
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
@@ -30,13 +30,16 @@
         canvas.width = 64
         canvas.height = 64
         let ctx = canvas.getContext('2d')
+        ctx.fillStyle = '#333'   // mortar color
+        ctx.fillRect(0, 0, 64, 64)
         for(let x=0;x<64;x+=8){
             for(let y=0;y<64;y+=6){
+            
+                ctx.fillStyle = 'red'
                 ctx.fillRect(x,y,6,4)
-                ctx.fillStyle = 'black'
             }
         }
-        texttures['brick'] = canvas
+        texttures[6] = canvas
     }
 
 
@@ -58,6 +61,7 @@
     // basicly init everything and start the draw loop
     window.addEventListener('load', () => { 
         // grab the canvas state 
+        generateTextures()
         canvasstate.canvas = document.getElementById("thecanvas")
         canvasstate.ctx = canvasstate.canvas.getContext("2d")
         canvasstate.canvas.height = window.innerHeight
@@ -78,9 +82,7 @@
                 ctx.fillStyle = 'yellow'
             } else if(ncolor == 5) {
                 ctx.fillStyle = 'purple'
-            } else if(ncolor == 6) {
-
-            }
+            }  
         } else {
             let R,G,B
             if(ncolor == 1){
@@ -105,8 +107,6 @@
                 R = 128
                 G = 0
                 B = 128
-            } else if(ncolor == 6){
-
             }
             ctx.fillStyle = `rgb(${Math.floor(R*brightness)}, ${Math.floor(G*brightness)}, ${Math.floor(B*brightness)})`
         }
@@ -146,13 +146,29 @@
             //     colormap(ctx,rays[n].color_code+1,shadedist)
             // }
 
-            colormap(ctx,rays[n].color_code,shadedist)
-
             let rect_top = SCREEN_HEIGHT/2 - stripHeight/2
             let rect_bottom = SCREEN_HEIGHT/2 + stripHeight/2
             let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
             let stripX = n * stripWidth
-            ctx.fillRect(stripX, rect_top, stripWidth, stripHeight)   // draw the top rect
+
+            if(rays[n].color_code < 6){
+                colormap(ctx,rays[n].color_code,shadedist)
+                ctx.fillRect(stripX, rect_top, stripWidth, stripHeight)   // draw the top rect
+            } else {
+                // debugger
+                let texture = texttures[rays[n].color_code] 
+                let texX = Math.floor(rays[n].wallX * texture.width)
+                ctx.drawImage(
+                    texture,
+                    texX, 0,          // source column
+                    1, texture.height, // 1px wide slice
+                    stripX, rect_top,  // destination position
+                    stripWidth, stripHeight  // stretched to strip size
+                )
+                // apply a gamma over the image slice so that it looks like it's getting darker when I walk away from it.
+                ctx.fillStyle = `rgba(0, 0, 0, ${1.0 - shadedist})`
+                ctx.fillRect(stripX, rect_top, stripWidth, stripHeight)
+            }
         }
     }
 
