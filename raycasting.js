@@ -53,7 +53,7 @@
     }
 
     let globalConsts = {
-        ambiantlight: 4.0
+        ambiantlight: 3.4
     }
 
     let canvasstate = {}
@@ -138,7 +138,10 @@
          
             let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
             let shadedist = Math.min(globalConsts.ambiantlight,globalConsts.ambiantlight / rays[n].perp_dist) 
-           
+            if(rays[n].side == 1){
+                shadedist = shadedist * 0.7
+            }
+
             // test the side detection by changing colors on some of the sides
             // if(rays[n].side == 0){
             //     colormap(ctx,rays[n].color_code,shadedist)
