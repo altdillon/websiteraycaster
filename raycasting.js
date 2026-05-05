@@ -26,10 +26,10 @@
 
     let texttures = []
     function generateTextures(){
-        let canvas = document.createElement('canvas')
-        canvas.width = 64
-        canvas.height = 64
-        let ctx = canvas.getContext('2d')
+        let bricks_canvas = document.createElement('canvas')
+        bricks_canvas.width = 64
+        bricks_canvas.height = 64
+        let ctx = bricks_canvas.getContext('2d')
         ctx.fillStyle = '#333'   // mortar color
         ctx.fillRect(0, 0, 64, 64)
         for(let x=0;x<64;x+=8){
@@ -39,7 +39,7 @@
                 ctx.fillRect(x,y,6,4)
             }
         }
-        texttures[6] = canvas
+        texttures[6] = bricks_canvas
     }
 
 
