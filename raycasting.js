@@ -24,22 +24,97 @@
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     ]
 
+    const grid2 = [
+        [7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,2,7],
+        [7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,2],
+        [7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,0,0,2,0,0,0,6,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,6,6,6,7],
+        [7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,3,2,3,0,0,0,0,0,0,0,7],
+        [7,0,0,4,0,0,0,0,0,0,7,0,0,0,0,0,0,0,0,7],
+        [7,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7],
+        [7,0,0,7,3,0,0,0,0,0,0,6,0,0,0,0,0,0,0,7],
+        [7,0,0,4,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,2,0,0,0,0,6,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,7],
+        [7,0,0,0,0,4,0,4,0,0,0,0,0,0,0,0,0,0,0,7],
+        [7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],
+    ]
+
     let texttures = []
     function generateTextures(){
+  
+        // make red bricks
         let bricks_canvas = document.createElement('canvas')
         bricks_canvas.width = 64
         bricks_canvas.height = 64
-        let ctx = bricks_canvas.getContext('2d')
-        ctx.fillStyle = '#333'   // mortar color
-        ctx.fillRect(0, 0, 64, 64)
+        let ctx1 = bricks_canvas.getContext('2d')
+        ctx1.fillStyle = '#333'   // mortar color
+        ctx1.fillRect(0, 0, 64, 64)
         for(let x=0;x<64;x+=8){
-            for(let y=0;y<64;y+=6){
-            
-                ctx.fillStyle = 'red'
-                ctx.fillRect(x,y,6,4)
+            for(let y=0;y<64;y+=6){ 
+                ctx1.fillStyle = 'red'
+                if(Math.floor(y / 6) % 2 == 0){
+                    ctx1.fillRect(x,y,6,4)
+                } else {
+                    ctx1.fillRect(x+3,y,6,4)
+                }
             }
         }
         texttures[6] = bricks_canvas
+    
+        // make blue gray bricks
+        let graybricks_canvas = document.createElement('canvas')
+        graybricks_canvas.width = 64
+        graybricks_canvas.height = 64
+        let ctx2 = graybricks_canvas.getContext('2d')
+
+        ctx2.fillStyle = '#333'   // mortar color
+        ctx2.fillRect(0, 0, 64, 64)
+        for(let x=0;x<64;x+=8){
+            for(let y=0;y<64;y+=6){ 
+                ctx2.fillStyle = 'grey'
+                if(Math.floor(y / 6) % 2 == 0){
+                    ctx2.fillRect(x,y,6,4)
+                } else {
+                    ctx2.fillRect(x+3,y,6,4)
+                }
+            }
+        }
+        texttures[7] = graybricks_canvas
+
+        // generate the wood texture that will be used on the celing
+        // Function to draw a single plank
+        function drawPlank(ctx,x, y, width, height) {
+            // Plank color
+            ctx.fillStyle = '#8B4513';
+            ctx.fillRect(x, y, width, height);
+
+            // Add wood grain lines
+            ctx.strokeStyle = '#A0522D';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                let yPos = y + (height / 5) * i + Math.random() * 10;
+                ctx.moveTo(x + 5, yPos);
+                ctx.lineTo(x + width - 5, yPos + Math.random() * 5);
+                ctx.stroke();
+            }
+        }
+
+        // generate a wood ctexture
+        let woodcanvas = document.createElement('canvas')
+        woodcanvas.width = 256
+        woodcanvas.height = 64
+        let woodctx = woodcanvas.getContext('2d')
+        drawPlank(woodctx,0,0,256,64)
+        texttures[8] = woodcanvas
     }
 
 
@@ -411,13 +486,13 @@
         // 2d View of the player
         if(!drawFPV){
             drawPlayer2D(canvasstate.ctx,player.px,player.py,player.angle)
-            rayCast(canvasstate.ctx,grid,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
-            drawMap2D(canvasstate.ctx,grid)
+            rayCast(canvasstate.ctx,grid2,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
+            drawMap2D(canvasstate.ctx,grid2)
         } else {
             //drawPlayer2D(canvasstate.ctx,player.px,player.py,player.angle)
-            let hitrays = rayCast(canvasstate.ctx,grid,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
+            let hitrays = rayCast(canvasstate.ctx,grid2,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
             //drawMap2D(canvasstate.ctx,grid)
-            drawWorld3D(canvasstate.ctx,hitrays,grid)
+            drawWorld3D(canvasstate.ctx,hitrays,grid2)
         }
 
         ref = window.requestAnimationFrame(draw)
