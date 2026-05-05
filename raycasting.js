@@ -273,8 +273,12 @@
                     //     ctx.fillStyle = 'yellow'
                     // }
                     colormap(ctx,mapworld[x][y])
-                    
-                    ctx.fillRect(boxX,boxY,boxSideX,boxSideY)
+                    if(mapworld[x][y] < 6){
+                        ctx.fillRect(boxX,boxY,boxSideX,boxSideY)
+                    } else {
+                        let texIndex = mapworld[x][y]
+                        ctx.drawImage(texttures[texIndex],boxX,boxY,boxSideX,boxSideY)
+                    }
                 }
             }
         }
