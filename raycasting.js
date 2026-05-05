@@ -1,6 +1,11 @@
 (()=>{
 
 
+    let globalConsts = {
+        ambiantlight: 3.4,
+        lighting_side_delta: 0.6
+    }
+
     const grid = [
     [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1],
     [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,2],
@@ -127,10 +132,6 @@
         py: 100,
     }
 
-    let globalConsts = {
-        ambiantlight: 3.4
-    }
-
     let canvasstate = {}
 
     // basicly init everything and start the draw loop
@@ -214,7 +215,7 @@
             let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
             let shadedist = Math.min(globalConsts.ambiantlight,globalConsts.ambiantlight / rays[n].perp_dist) 
             if(rays[n].side == 1){
-                shadedist = shadedist * 0.7
+                shadedist = shadedist * globalConsts.lighting_side_delta
             }
 
             // test the side detection by changing colors on some of the sides
