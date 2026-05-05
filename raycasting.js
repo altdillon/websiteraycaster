@@ -2,8 +2,8 @@
 
 
     let globalConsts = {
-        ambiantlight: 3.1,
-        lighting_side_delta: 0.2
+        ambiantlight: 3.2,
+        lighting_side_delta: 0.3
     }
 
     const grid = [
