@@ -3,7 +3,8 @@
 
     let globalConsts = {
         ambiantlight: 3.2,
-        lighting_side_delta: 0.3
+        lighting_side_delta: 0.3,
+        textured_sky_floor: true
     }
 
     const grid = [
@@ -188,6 +189,18 @@
         }
     }
 
+    function drawTopBottom(ctx,angle,floor_tex,cel_tex){
+        // pre compute some constents
+        const SCREEN_WIDTH = window.innerWidth
+        const SCREEN_HEIGHT = window.innerHeight
+        const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) 
+
+        // render the sky texture
+        let sky_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
+
+        debugger
+    }
+
     function drawWorld3D(ctx,rays,map){
         const SCALE_fACTOR = 1.0
         const rows = map.length        // 20
@@ -198,15 +211,18 @@
         const SCREEN_HEIGHT = window.innerHeight
         const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) * SCALE_fACTOR
        
-       
-        // ceiling
-        ctx.fillStyle = 'black'
-        ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2)
+        if(!globalConsts.textured_sky_floor){
+            // ceiling
+            ctx.fillStyle = 'black'
+            ctx.fillRect(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT/2)
 
-        // floor
-        ctx.fillStyle = 'grey'
-        ctx.fillRect(0, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT/2) 
-       
+            // floor
+            ctx.fillStyle = 'grey'
+            ctx.fillRect(0, SCREEN_HEIGHT/2, SCREEN_WIDTH, SCREEN_HEIGHT/2) 
+        }
+
+        //return // stub!!!        
+
         for(let n=0;n<rays.length;n++){
             //debugger
              
@@ -374,8 +390,6 @@
         let n = 0 
         for(let theta = start_angle;theta < (stop_angle);theta+=dtheta){
 
-
-
         // ***********************************************************************
             let oldGridX = Math.floor(x / boxSideX)
             let oldGridY = Math.floor(y / boxSideY)
@@ -498,6 +512,9 @@
             let hitrays = rayCast(canvasstate.ctx,grid2,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
             //drawMap2D(canvasstate.ctx,grid)
             drawWorld3D(canvasstate.ctx,hitrays,grid2)
+            if(globalConsts.textured_sky_floor){
+                drawTopBottom(canvasstate.ctx,player.angle,texttures[8],texttures[8])
+            }
         }
 
         ref = window.requestAnimationFrame(draw)
