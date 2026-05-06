@@ -198,6 +198,15 @@
         // render the sky texture
         let sky_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
 
+        for(let y=0;y<SCREEN_HEIGHT/2;y++){
+            let rowDist = PROJECTION_PLANE_DIST / (SCREEN_HEIGHT/2 - y) 
+
+
+            for(let x=0;x<SCREEN_WIDTH;x++){
+            }
+
+        }
+        
         debugger
     }
 
