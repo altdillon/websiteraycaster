@@ -189,11 +189,15 @@
         }
     }
 
-    function drawTopBottom(ctx,angle,floor_tex,cel_tex){
+    function drawTopBottom(ctx,angle,floor_tex,cel_tex,grid){
         // pre compute some constents
         const SCREEN_WIDTH = window.innerWidth
         const SCREEN_HEIGHT = window.innerHeight
         const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) 
+
+        // compute start and stop angles
+        let start_angle = angle - player.pov / 2
+        let stop_angle = angle + player.pov / 2
 
         // render the sky texture
         let sky_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
@@ -201,13 +205,26 @@
         for(let y=0;y<SCREEN_HEIGHT/2;y++){
             let rowDist = PROJECTION_PLANE_DIST / (SCREEN_HEIGHT/2 - y) 
 
+            let leftRayX = player.px + rowDist * Math.cos(start_angle)
+            let leftRayY = player.py + rowDist * Math.sin(start_angle)
+            let rightRayX = player.px + rowDist * Math.cos(stop_angle)
+            let rightRayY = player.py + rowDist * Math.sin(stop_angle)
+
+            let stepX = (rightRayX - leftRayX) / SCREEN_WIDTH
+            let stepY = (rightRayY - leftRayY) / SCREEN_WIDTH
+
+            let worldX = leftRayX
+            let worldY = leftRayY
+
+            let frac = (v) => {return v - Math.floor(v)}
 
             for(let x=0;x<SCREEN_WIDTH;x++){
+            
             }
 
         }
         
-        debugger
+        
     }
 
     function drawWorld3D(ctx,rays,map){
@@ -522,7 +539,7 @@
             //drawMap2D(canvasstate.ctx,grid)
             drawWorld3D(canvasstate.ctx,hitrays,grid2)
             if(globalConsts.textured_sky_floor){
-                drawTopBottom(canvasstate.ctx,player.angle,texttures[8],texttures[8])
+                drawTopBottom(canvasstate.ctx,player.angle,texttures[8],texttures[8],grid2)
             }
         }
 
