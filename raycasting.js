@@ -212,6 +212,7 @@
 
         // render the sky texture
         let sky_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
+        let floor_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
         //let sky_ctx = cel_tex.getContext('2d').getImageData(0,0,cel_tex.width,cel_tex.height)
    
 
@@ -257,9 +258,54 @@
             }
 
         }
-        
-        // draw the image to the screen
+
+    
+        for(let y=0;y<SCREEN_HEIGHT/2;y++){
+            let rowDist = (PROJECTION_PLANE_DIST / (SCREEN_HEIGHT/2 -y)) * boxSizeY
+            //let brightness = Math.min(globalConsts.ambiantlight, globalConsts.ambiantlight / rowDist)
+            let brightness = Math.min(1.0, globalConsts.floor_ambiantlight / (rowDist/100))
+            //debugger
+            let leftRayX = player.px - rowDist * Math.cos(start_angle)
+            let leftRayY = player.py - rowDist * Math.sin(start_angle)
+            let rightRayX = player.px - rowDist * Math.cos(stop_angle)
+            let rightRayY = player.py - rowDist * Math.sin(stop_angle)
+
+
+            let stepX = (leftRayX - rightRayX) / SCREEN_WIDTH
+            let stepY = (leftRayY - rightRayY) / SCREEN_WIDTH
+
+            let worldX = leftRayX
+            let worldY = leftRayY
+
+            for(let x=0;x<SCREEN_WIDTH;x++){
+                let texX = Math.floor(frac(worldX / boxSizeX) * floor_imagedata.width)
+                let texY = Math.floor(frac(worldY / boxSizeY) * floor_imagedata.height)
+                // texX = Math.abs(texX) % cel_tex.width
+                // texY = Math.abs(texY) % cel_tex.height
+                //let texX = Math.floor(frac(worldX / cel_tex.width) * cel_tex.width)
+                //let texY = Math.floor(frac(worldY / cel_tex.height) * cel_tex.height)
+
+
+                let sourceIndex = (texY * floor_imagedata.width + texX) * 4
+                //let destIndex = (y * SCREEN_WIDTH + x) * 4
+                let destIndex = ((SCREEN_HEIGHT/2 - 1 - y) * SCREEN_WIDTH + x) * 4
+
+                floor_texture.data[destIndex] = floor_imagedata.data[sourceIndex]  * brightness    // red
+                floor_texture.data[destIndex+1] = floor_imagedata.data[sourceIndex+1] * brightness // blue
+                floor_texture.data[destIndex+2] = floor_imagedata.data[sourceIndex+2] * brightness // green
+                // sky_texture.data[destIndex+3] = sky_ctx.data[sourceIndex+3] // alpha
+                floor_texture.data[destIndex+3] = 255                //debugger
+
+                worldX += stepX
+                worldY += stepY
+
+            }
+
+        }
+
+        // draw both textures to the scren
         ctx.putImageData(sky_texture,0,0)
+        ctx.putImageData(floor_texture,0,Math.floor(SCREEN_HEIGHT/2))
     }
 
     function drawWorld3D(ctx,rays,map){
