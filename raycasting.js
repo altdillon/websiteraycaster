@@ -265,15 +265,13 @@
             //let brightness = Math.min(globalConsts.ambiantlight, globalConsts.ambiantlight / rowDist)
             let brightness = Math.min(1.0, globalConsts.floor_ambiantlight / (rowDist/100))
             //debugger
-            let leftRayX = player.px - rowDist * Math.cos(start_angle)
-            let leftRayY = player.py - rowDist * Math.sin(start_angle)
-            let rightRayX = player.px - rowDist * Math.cos(stop_angle)
-            let rightRayY = player.py - rowDist * Math.sin(stop_angle)
+            let leftRayX  = player.px + rowDist * Math.cos(start_angle)
+            let leftRayY  = player.py + rowDist * Math.sin(start_angle)
+            let rightRayX = player.px + rowDist * Math.cos(stop_angle)  // + not -
+            let rightRayY = player.py + rowDist * Math.sin(stop_angle)  // + not -
 
-
-            let stepX = (leftRayX - rightRayX) / SCREEN_WIDTH
-            let stepY = (leftRayY - rightRayY) / SCREEN_WIDTH
-
+            let stepX = (rightRayX - leftRayX) / SCREEN_WIDTH  // right - left, not left - right
+            let stepY = (rightRayY - leftRayY) / SCREEN_WIDTH
             let worldX = leftRayX
             let worldY = leftRayY
 
@@ -288,7 +286,8 @@
 
                 let sourceIndex = (texY * floor_imagedata.width + texX) * 4
                 //let destIndex = (y * SCREEN_WIDTH + x) * 4
-                let destIndex = ((SCREEN_HEIGHT/2 - 1 - y) * SCREEN_WIDTH + x) * 4
+               let destIndex = (y * SCREEN_WIDTH + (SCREEN_WIDTH - 1 - x)) * 4 
+                //let destIndex = (SCREEN_HEIGHT/2 - 1 - y)
 
                 floor_texture.data[destIndex] = floor_imagedata.data[sourceIndex]  * brightness    // red
                 floor_texture.data[destIndex+1] = floor_imagedata.data[sourceIndex+1] * brightness // blue
