@@ -5,7 +5,8 @@
         ambiantlight: 3.2,
         lighting_side_delta: 0.3,
         floor_ambiantlight: 1,
-        textured_sky_floor: true
+        textured_sky_floor: true,
+        player_height: 100.0
     }
 
     const grid = [
@@ -136,6 +137,7 @@
         fov: 60.0 * (Math.PI/180),
         px: 100,
         py: 100,
+        height: 0.0
     }
 
     let canvasstate = {}
@@ -351,8 +353,11 @@
             //     colormap(ctx,rays[n].color_code+1,shadedist)
             // }
 
-            let rect_top = SCREEN_HEIGHT/2 - stripHeight/2
-            let rect_bottom = SCREEN_HEIGHT/2 + stripHeight/2
+            let horizon = SCREEN_HEIGHT/2 + player.height 
+            // let rect_top = SCREEN_HEIGHT/2 - stripHeight/2
+            let rect_top = horizon - stripHeight/2 
+            // let rect_bottom = SCREEN_HEIGHT/2 + stripHeight/2
+            let rect_bottom = horizon + stripHeight/2 
             let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
             let stripX = n * stripWidth
 
@@ -572,8 +577,16 @@
         keys[e.key] = true
     
         // special ahdnle for drawFPV
-        if(e.key == 'x' && e.repeat == false){
-            drawFPV = ~drawFPV
+        // if(e.key == 'x' && e.repeat == false){
+        //     drawFPV = ~drawFPV
+        // }
+        if(e.repeat == false){
+            if(e.key == 'x'){
+                drawFPV = ~drawFPV // turn first person view on or off
+            }
+            // if(e.key == 'c'){
+            //     player.height += 10.0
+            // }
         }
     });
 
@@ -590,6 +603,13 @@
     let drawFPV_Last_value = true
 
     function draw(){
+
+        // crounch function
+        if(keys['c']){
+            player.height = -200.0
+        }else{
+            player.height = 0.0
+        }
 
 
         // rotate
