@@ -217,9 +217,24 @@
         let floor_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
         //let sky_ctx = cel_tex.getContext('2d').getImageData(0,0,cel_tex.width,cel_tex.height)
 
+
         // compute the floor first '
         for(let n=0;n<rays.length;n++){
-
+            if(!rays[n]){continue} // skip if there's something bad
+            // find the bottom of the rect
+            let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
+            let horizon = SCREEN_HEIGHT/2 + player.height 
+            let rect_top = horizon - stripHeight/2 
+            let rect_bottom = horizon + stripHeight/2 
+            let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
+            let stripX = n * stripWidth
+            // figure out dims of the rest of the block
+            let floorBlockWidth = stripWidth
+            let floorBlockHeight = rect_bottom
+            // draw a text rect 
+            ctx.fillStyle = 'brown'
+            ctx.fillRect(stripX,rect_bottom,stripWidth,floorBlockHeight)
+            
         }
 
         // let frac = (v) => {return v - Math.floor(v)}
