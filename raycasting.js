@@ -119,8 +119,8 @@
 
         // generate a wood ctexture
         let woodcanvas = document.createElement('canvas')
-        woodcanvas.width = 256
-        woodcanvas.height = 64
+        woodcanvas.width = 64
+        woodcanvas.height = 128
         let woodctx = woodcanvas.getContext('2d')
         drawPlank(woodctx,0,0,256,64)
         texttures[8] = woodcanvas
@@ -194,7 +194,7 @@
         }
     }
 
-    function drawTopBottom(ctx,angle,floor_imagedata,sky_imagedata,map){
+    function drawTopBottom(ctx,angle,floor_imagedata,sky_imagedata,map,rays){
         // pre compute some constents
         const SCREEN_WIDTH = window.innerWidth
         const SCREEN_HEIGHT = window.innerHeight
@@ -214,97 +214,101 @@
         let sky_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
         let floor_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
         //let sky_ctx = cel_tex.getContext('2d').getImageData(0,0,cel_tex.width,cel_tex.height)
-   
 
-        let frac = (v) => {return v - Math.floor(v)}
-
-        for(let y=0;y<SCREEN_HEIGHT/2;y++){
-            let rowDist = (PROJECTION_PLANE_DIST / (SCREEN_HEIGHT/2 - y)) * boxSizeY
-            //let brightness = Math.min(globalConsts.ambiantlight, globalConsts.ambiantlight / rowDist)
-            let brightness = Math.min(1.0, globalConsts.floor_ambiantlight / (rowDist/100))
-            //debugger
-            let leftRayX = player.px + rowDist * Math.cos(start_angle)
-            let leftRayY = player.py + rowDist * Math.sin(start_angle)
-            let rightRayX = player.px + rowDist * Math.cos(stop_angle)
-            let rightRayY = player.py + rowDist * Math.sin(stop_angle)
-
-            let stepX = (rightRayX - leftRayX) / SCREEN_WIDTH
-            let stepY = (rightRayY - leftRayY) / SCREEN_WIDTH
-
-            let worldX = leftRayX
-            let worldY = leftRayY
-
-            for(let x=0;x<SCREEN_WIDTH;x++){
-                let texX = Math.floor(frac(worldX / boxSizeX) * sky_imagedata.width)
-                let texY = Math.floor(frac(worldY / boxSizeY) * sky_imagedata.height)
-                // texX = Math.abs(texX) % cel_tex.width
-                // texY = Math.abs(texY) % cel_tex.height
-                //let texX = Math.floor(frac(worldX / cel_tex.width) * cel_tex.width)
-                //let texY = Math.floor(frac(worldY / cel_tex.height) * cel_tex.height)
-
-
-                let sourceIndex = (texY * sky_imagedata.width + texX) * 4
-                let destIndex = (y * SCREEN_WIDTH + x) * 4
-
-                sky_texture.data[destIndex] = sky_imagedata.data[sourceIndex]  * brightness    // red
-                sky_texture.data[destIndex+1] = sky_imagedata.data[sourceIndex+1] * brightness // blue
-                sky_texture.data[destIndex+2] = sky_imagedata.data[sourceIndex+2] * brightness // green
-                // sky_texture.data[destIndex+3] = sky_ctx.data[sourceIndex+3] // alpha
-                sky_texture.data[destIndex+3] = 255                //debugger
-
-                worldX += stepX
-                worldY += stepY
-
-            }
+        // compute the floor first '
+        for(let n=0;n<rays.length;n++){
 
         }
+
+        // let frac = (v) => {return v - Math.floor(v)}
+
+        // for(let y=0;y<SCREEN_HEIGHT/2;y++){
+        //     let rowDist = (PROJECTION_PLANE_DIST / (SCREEN_HEIGHT/2 - y)) * boxSizeY
+        //     //let brightness = Math.min(globalConsts.ambiantlight, globalConsts.ambiantlight / rowDist)
+        //     let brightness = Math.min(1.0, globalConsts.floor_ambiantlight / (rowDist/100))
+        //     //debugger
+        //     let leftRayX = player.px + rowDist * Math.cos(start_angle)
+        //     let leftRayY = player.py + rowDist * Math.sin(start_angle)
+        //     let rightRayX = player.px + rowDist * Math.cos(stop_angle)
+        //     let rightRayY = player.py + rowDist * Math.sin(stop_angle)
+
+        //     let stepX = (rightRayX - leftRayX) / SCREEN_WIDTH
+        //     let stepY = (rightRayY - leftRayY) / SCREEN_WIDTH
+
+        //     let worldX = leftRayX
+        //     let worldY = leftRayY
+
+        //     for(let x=0;x<SCREEN_WIDTH;x++){
+        //         let texX = Math.floor(frac(worldX / boxSizeX) * sky_imagedata.width)
+        //         let texY = Math.floor(frac(worldY / boxSizeY) * sky_imagedata.height)
+        //         // texX = Math.abs(texX) % cel_tex.width
+        //         // texY = Math.abs(texY) % cel_tex.height
+        //         //let texX = Math.floor(frac(worldX / cel_tex.width) * cel_tex.width)
+        //         //let texY = Math.floor(frac(worldY / cel_tex.height) * cel_tex.height)
+
+
+        //         let sourceIndex = (texY * sky_imagedata.width + texX) * 4
+        //         let destIndex = (y * SCREEN_WIDTH + x) * 4
+
+        //         sky_texture.data[destIndex] = sky_imagedata.data[sourceIndex]  * brightness    // red
+        //         sky_texture.data[destIndex+1] = sky_imagedata.data[sourceIndex+1] * brightness // blue
+        //         sky_texture.data[destIndex+2] = sky_imagedata.data[sourceIndex+2] * brightness // green
+        //         // sky_texture.data[destIndex+3] = sky_ctx.data[sourceIndex+3] // alpha
+        //         sky_texture.data[destIndex+3] = 255                //debugger
+
+        //         worldX += stepX
+        //         worldY += stepY
+
+        //     }
+
+        // }
 
     
-        for(let y=0;y<SCREEN_HEIGHT/2;y++){
-            let rowDist = (PROJECTION_PLANE_DIST / (SCREEN_HEIGHT/2 -y)) * boxSizeY
-            //let brightness = Math.min(globalConsts.ambiantlight, globalConsts.ambiantlight / rowDist)
-            let brightness = Math.min(1.0, globalConsts.floor_ambiantlight / (rowDist/100))
-            //debugger
-            let leftRayX  = player.px + rowDist * Math.cos(start_angle)
-            let leftRayY  = player.py + rowDist * Math.sin(start_angle)
-            let rightRayX = player.px + rowDist * Math.cos(stop_angle)  // + not -
-            let rightRayY = player.py + rowDist * Math.sin(stop_angle)  // + not -
+        // for(let y=0;y<SCREEN_HEIGHT/2;y+=9){
+        //     let rowDist = (PROJECTION_PLANE_DIST / (SCREEN_HEIGHT/2 -y)) * boxSizeY
+        //     //let brightness = Math.min(globalConsts.ambiantlight, globalConsts.ambiantlight / rowDist)
+        //     let brightness = Math.min(1.0, globalConsts.floor_ambiantlight / (rowDist/100))
+        //     //debugger
+        //     let leftRayX  = player.px + rowDist * Math.cos(start_angle)
+        //     let leftRayY  = player.py + rowDist * Math.sin(start_angle)
+        //     let rightRayX = player.px + rowDist * Math.cos(stop_angle)  // + not -
+        //     let rightRayY = player.py + rowDist * Math.sin(stop_angle)  // + not -
 
-            let stepX = (rightRayX - leftRayX) / SCREEN_WIDTH  // right - left, not left - right
-            let stepY = (rightRayY - leftRayY) / SCREEN_WIDTH
-            let worldX = leftRayX
-            let worldY = leftRayY
+        //     let stepX = (rightRayX - leftRayX) / SCREEN_WIDTH  // right - left, not left - right
+        //     let stepY = (rightRayY - leftRayY) / SCREEN_WIDTH
+        //     let worldX = leftRayX
+        //     let worldY = leftRayY
 
-            for(let x=0;x<SCREEN_WIDTH;x++){
-                let texX = Math.floor(frac(worldX / boxSizeX) * floor_imagedata.width)
-                let texY = Math.floor(frac(worldY / boxSizeY) * floor_imagedata.height)
-                // texX = Math.abs(texX) % cel_tex.width
-                // texY = Math.abs(texY) % cel_tex.height
-                //let texX = Math.floor(frac(worldX / cel_tex.width) * cel_tex.width)
-                //let texY = Math.floor(frac(worldY / cel_tex.height) * cel_tex.height)
+        //     for(let x=0;x<SCREEN_WIDTH;x+=9){
+        //         let texX = Math.floor(frac(worldX / boxSizeX) * floor_imagedata.width)
+        //         let texY = Math.floor(frac(worldY / boxSizeY) * floor_imagedata.height)
+        //         // texX = Math.abs(texX) % cel_tex.width
+        //         // texY = Math.abs(texY) % cel_tex.height
+        //         //let texX = Math.floor(frac(worldX / cel_tex.width) * cel_tex.width)
+        //         //let texY = Math.floor(frac(worldY / cel_tex.height) * cel_tex.height)
 
 
-                let sourceIndex = (texY * floor_imagedata.width + texX) * 4
-                //let destIndex = (y * SCREEN_WIDTH + x) * 4
-               let destIndex = (y * SCREEN_WIDTH + (SCREEN_WIDTH - 1 - x)) * 4 
-                //let destIndex = (SCREEN_HEIGHT/2 - 1 - y)
+        //         let sourceIndex = (texY * floor_imagedata.width + texX) * 4
+        //         //let destIndex = (y * SCREEN_WIDTH + x) * 4
+        //        let destIndex = (y * SCREEN_WIDTH + (SCREEN_WIDTH - 1 - x)) * 4 
+        //         //let destIndex = (SCREEN_HEIGHT/2 - 1 - y)
 
-                floor_texture.data[destIndex] = floor_imagedata.data[sourceIndex]  * brightness    // red
-                floor_texture.data[destIndex+1] = floor_imagedata.data[sourceIndex+1] * brightness // blue
-                floor_texture.data[destIndex+2] = floor_imagedata.data[sourceIndex+2] * brightness // green
-                // sky_texture.data[destIndex+3] = sky_ctx.data[sourceIndex+3] // alpha
-                floor_texture.data[destIndex+3] = 255                //debugger
+        //         floor_texture.data[destIndex] = floor_imagedata.data[sourceIndex]  * brightness    // red
+        //         floor_texture.data[destIndex+1] = floor_imagedata.data[sourceIndex+1] * brightness // blue
+        //         floor_texture.data[destIndex+2] = floor_imagedata.data[sourceIndex+2] * brightness // green
+        //         // sky_texture.data[destIndex+3] = sky_ctx.data[sourceIndex+3] // alpha
+        //         floor_texture.data[destIndex+3] = 255                //debugger
 
-                worldX += stepX
-                worldY += stepY
+        //         worldX += stepX
+        //         worldY += stepY
 
-            }
+        //     }
 
-        }
+        // }
 
         // draw both textures to the scren
-        ctx.putImageData(sky_texture,0,0)
-        ctx.putImageData(floor_texture,0,Math.floor(SCREEN_HEIGHT/2))
+        // ctx.putImageData(sky_texture,0,0)
+        //ctx.putImageData(floor_texture,0,Math.floor(SCREEN_HEIGHT/2))
     }
 
     function drawWorld3D(ctx,rays,map){
@@ -579,10 +583,10 @@
 
     
 
-    const NUM_RAWS = 1001
+    const NUM_RAWS = 601
     const STEP_DDA = 2
     const DELTA_THETA = 0.1
-    const ds = 4
+    const ds = 8
     let drawFPV_Last_value = true
 
     function draw(){
@@ -618,7 +622,7 @@
             let hitrays = rayCast(canvasstate.ctx,grid2,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
             //drawMap2D(canvasstate.ctx,grid)
             if(globalConsts.textured_sky_floor){
-                drawTopBottom(canvasstate.ctx,player.angle,textureImageData[7],textureImageData[8],grid2)
+                drawTopBottom(canvasstate.ctx,player.angle,textureImageData[7],textureImageData[8],grid2,hitrays)
             }
             drawWorld3D(canvasstate.ctx,hitrays,grid2)
         }
