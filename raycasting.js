@@ -129,6 +129,11 @@
         textureImageData[8] = woodctx.getImageData(0,0,woodcanvas.width,woodcanvas.height)
     }
 
+    // take in a texture and a list of rays and compute the celing and floor warp
+    // this will serve as a way to pre compute the warp each frame and drawing it to another canvas that can then be copied to the other frame
+    function warp(texture,rays){
+
+    }
 
     let keys = []
 
@@ -235,16 +240,9 @@
             let floorBlockWidth = stripWidth
             let floorBlockHeight = rect_bottom
             // draw a text rect 
-            ctx.fillStyle = 'brown'
-            ctx.fillRect(stripX,rect_bottom,stripWidth,floorBlockHeight)
-            
-            // copy in floor image data to floor texture imagedata object
-            // for(let i=0;i<(floorBlockHeight*floorBlockWidth*3);i+=4){
-            //     floor_texture.data[i] = floor_imagedata.data[i] // red
-            //     floor_texture.data[i+1] = floor_imagedata.data[i+1] // green
-            //     floor_texture.data[i+2] = floor_imagedata.data[i+2] // blue
-            //     floor_texture.data[i+3] = floor_imagedata.data[i+3] // alpha
-            // }
+            // ctx.fillStyle = 'brown'
+            // ctx.fillRect(stripX,rect_bottom,stripWidth,floorBlockHeight)
+            ctx.drawImage(floor_imagedata,stripX,rect_bottom,stripWidth,floorBlockHeight)
         }
 
         // let frac = (v) => {return v - Math.floor(v)}
@@ -667,7 +665,7 @@
             let hitrays = rayCast(canvasstate.ctx,grid2,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
             //drawMap2D(canvasstate.ctx,grid)
             if(globalConsts.textured_sky_floor){
-                drawTopBottom(canvasstate.ctx,player.angle,textureImageData[7],textureImageData[8],grid2,hitrays)
+                drawTopBottom(canvasstate.ctx,player.angle,texttures[7],texttures[8],grid2,hitrays)
             }
             drawWorld3D(canvasstate.ctx,hitrays,grid2)
         }
