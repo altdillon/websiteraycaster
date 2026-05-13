@@ -10,26 +10,26 @@
     }
 
     const grid = [
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,2],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,6,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,6,6,6,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,3,2,3,0,0,0,0,0,0,0,1],
-    [1,0,0,4,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
-    [1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,1,3,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
-    [1,0,0,4,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,2,0,0,0,0,6,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,0,0,0,0,4,0,4,0,0,0,0,0,0,0,0,0,0,0,1],
-    [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,2],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,2,0,0,0,6,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,6,6,6,6,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,3,2,3,0,0,0,0,0,0,0,1],
+        [1,0,0,4,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1],
+        [1,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,1,3,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
+        [1,0,0,4,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,2,0,0,0,0,6,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,6,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,3,0,0,0,0,6,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,0,0,0,0,4,0,4,0,0,0,0,0,0,0,0,0,0,0,1],
+        [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
     ]
 
     const grid2 = [
@@ -218,15 +218,18 @@
         //let sky_ctx = cel_tex.getContext('2d').getImageData(0,0,cel_tex.width,cel_tex.height)
 
 
+        let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
+        let horizon = SCREEN_HEIGHT/2 + player.height 
+
         // compute the floor first '
         for(let n=0;n<rays.length;n++){
             if(!rays[n]){continue} // skip if there's something bad
             // find the bottom of the rect
             let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
-            let horizon = SCREEN_HEIGHT/2 + player.height 
+            // let horizon = SCREEN_HEIGHT/2 + player.height 
             let rect_top = horizon - stripHeight/2 
             let rect_bottom = horizon + stripHeight/2 
-            let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
+            // let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
             let stripX = n * stripWidth
             // figure out dims of the rest of the block
             let floorBlockWidth = stripWidth
@@ -235,6 +238,13 @@
             ctx.fillStyle = 'brown'
             ctx.fillRect(stripX,rect_bottom,stripWidth,floorBlockHeight)
             
+            // copy in floor image data to floor texture imagedata object
+            // for(let i=0;i<(floorBlockHeight*floorBlockWidth*3);i+=4){
+            //     floor_texture.data[i] = floor_imagedata.data[i] // red
+            //     floor_texture.data[i+1] = floor_imagedata.data[i+1] // green
+            //     floor_texture.data[i+2] = floor_imagedata.data[i+2] // blue
+            //     floor_texture.data[i+3] = floor_imagedata.data[i+3] // alpha
+            // }
         }
 
         // let frac = (v) => {return v - Math.floor(v)}
