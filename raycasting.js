@@ -6,7 +6,9 @@
         lighting_side_delta: 0.3,
         floor_ambiantlight: 1,
         textured_sky_floor: true,
-        player_height: 100.0
+        player_height: 100.0,
+        box_side_sizeX: 20.0,
+        box_side_sizeY: 3.0
     }
 
     const grid = [
@@ -54,6 +56,7 @@
         [7,0,0,0,0,4,0,4,0,0,0,0,0,0,0,0,0,0,0,7],
         [7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7,7],
     ]
+
 
     let texttures = []
     let textureImageData = []
@@ -137,6 +140,8 @@
         const SCREEN_HEIGHT = window.innerHeight
         const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) 
 
+        let wrapped_texture = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT/2)
+
         let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
         let horizon = SCREEN_HEIGHT/2 + player.height 
 
@@ -144,9 +149,12 @@
             for(let n=0;n<rays.length;n++){
                 let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
                 let wallButtom = horizon + stripHeight/2 // start with the bottom of the wall
-                let beta = Math.abs(rays[n].angle - player.angle) 
+                let beta = Math.abs(rays[n].angle - player.angle) // angle between the player's direction and the ray cast angle
                 for(let y=wallButtom;y<SCREEN_HEIGHT;y++){
-
+                    let floor_dist = PROJECTION_PLANE_DIST / (y-horizon)
+                    let worldX = player.px + floor_dist * Math.cos(rays[n].theta)
+                    let worldY = player.py + floor_dist * Math.sin(rays[n].theta)
+                    // ok, now that we know worldX and worldY we have to map that into a wrapped texture 
                 }
 
             }
@@ -226,8 +234,10 @@
         const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) 
 
 
-        const rows = map.length        // 20
-        const cols = map[0].length     // 20
+        //const rows = map.length        // 20
+        //const cols = map[0].length     // 20
+        const rows = globalConsts.box_side_sizeX
+        const cols = globalConsts.box_side_sizeY 
         let boxSizeX = window.innerWidth / cols
         let boxSizeY = window.innerHeight / rows
 
@@ -354,12 +364,14 @@
         //ctx.putImageData(floor_texture,0,Math.floor(SCREEN_HEIGHT/2))
     }
 
-    function drawWorld3D(ctx,rays,map){
+    function drawWorld3D(ctx,rays){
         const SCALE_fACTOR = 1.0
-        const rows = map.length        // 20
-        const cols = map[0].length     // 20
-        let boxSideX = window.innerWidth / cols
-        let boxSideY = window.innerHeight / rows
+        // const rows = map.length        // 20
+        // const cols = map[0].length     // 20
+        //let boxSideX = window.innerWidth / cols
+        //let boxSideY = window.innerHeight / rows
+        // let boxSideX = globalConsts.box_side_sizeX
+        // let boxSideY = globalConsts.box_side_sizeY 
         const SCREEN_WIDTH = window.innerWidth
         const SCREEN_HEIGHT = window.innerHeight
         const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) * SCALE_fACTOR
@@ -429,6 +441,8 @@
         //const cellsq = 10 // some value of pixes to draw on the screen
         let boxSideX = window.innerWidth / cols
         let boxSideY = window.innerHeight / rows
+        // let boxSideX = globalConsts.box_side_sizeX
+        // let boxSideY = globalConsts.box_side_sizeY
 
         for(let x = 0;x<cols;x++){
             for(let y=0;y<rows;y++){
@@ -687,7 +701,7 @@
             if(globalConsts.textured_sky_floor){
                 drawTopBottom(canvasstate.ctx,player.angle,texttures[7],texttures[8],grid2,hitrays)
             }
-            drawWorld3D(canvasstate.ctx,hitrays,grid2)
+            drawWorld3D(canvasstate.ctx,hitrays)
         }
 
         ref = window.requestAnimationFrame(draw)
