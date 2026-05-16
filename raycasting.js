@@ -140,8 +140,16 @@
         let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
         let horizon = SCREEN_HEIGHT/2 + player.height 
 
-        for(let n=0;n<rays.length;n++){
-            debugger
+        if(inverted == false){
+            for(let n=0;n<rays.length;n++){
+                let stripHeight = PROJECTION_PLANE_DIST / rays[n].perp_dist
+                let wallButtom = horizon + stripHeight/2 // start with the bottom of the wall
+                let beta = Math.abs(rays[n].angle - player.angle) 
+                for(let y=wallButtom;y<SCREEN_HEIGHT;y++){
+
+                }
+
+            }
         }
     }
 
@@ -615,7 +623,7 @@
         // }
         if(e.repeat == false){
             if(e.key == 'x'){
-                drawFPV = ~drawFPV // turn first person view on or off
+                drawFPV = !drawFPV // turn first person view on or off
             }
             // if(e.key == 'c'){
             //     player.height += 10.0
