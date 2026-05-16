@@ -208,7 +208,7 @@
         let boxSizeY = window.innerHeight / rows
 
         let texture_data = texture.getContext('2d').getImageData(0,0,texture.width,texture.height)
-        let wrapped_texture_data = new ImageData(texture.width,texture.height)
+        let wrapped_texture_data = new ImageData(SCREEN_WIDTH,SCREEN_HEIGHT)
 
         let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
         let horizon = SCREEN_HEIGHT/2 + player.height 
@@ -229,11 +229,14 @@
                     // then I guess copy that to wrapped texture
                     let sourceIndex = (texY * texture.width + texX) * 4
                     let destIndex = (y * SCREEN_WIDTH + stripX) * 4
+                    wrapped_texture_data.data[destIndex] = texture_data.data[sourceIndex]
                     //debugger  
                 }
 
             }
         }
+        let wrapped_canvas = document.createElement('canvas').getContext('2d').putImageData(wrapped_texture_data,0,0)
+        return wrapped_canvas
     }
 
     let keys = []
