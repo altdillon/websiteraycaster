@@ -131,8 +131,18 @@
 
     // take in a texture and a list of rays and compute the celing and floor warp
     // this will serve as a way to pre compute the warp each frame and drawing it to another canvas that can then be copied to the other frame
-    function warp(texture,rays){
+    function warp(texture,rays,inverted=false){
 
+        const SCREEN_WIDTH = window.innerWidth
+        const SCREEN_HEIGHT = window.innerHeight
+        const PROJECTION_PLANE_DIST = (SCREEN_WIDTH/2) / Math.tan(player.fov/2) 
+
+        let stripWidth = Math.ceil(SCREEN_WIDTH / rays.length)
+        let horizon = SCREEN_HEIGHT/2 + player.height 
+
+        for(let n=0;n<rays.length;n++){
+            debugger
+        }
     }
 
     let keys = []
@@ -592,7 +602,7 @@
     }
 
 
-    let drawFPV = false
+    let drawFPV = true
 
     // Register global listeners
     window.addEventListener('keydown', (e) => {
@@ -663,6 +673,8 @@
         } else {
             //drawPlayer2D(canvasstate.ctx,player.px,player.py,player.angle)
             let hitrays = rayCast(canvasstate.ctx,grid2,STEP_DDA,player.px,player.py,player.angle,10000,NUM_RAWS)
+            let warped_floor = warp(texttures[7],hitrays)
+            let warped_ceil = warp(texttures[8],hitrays)
             //drawMap2D(canvasstate.ctx,grid)
             if(globalConsts.textured_sky_floor){
                 drawTopBottom(canvasstate.ctx,player.angle,texttures[7],texttures[8],grid2,hitrays)
