@@ -622,7 +622,7 @@
         //     drawFPV = ~drawFPV
         // }
         if(e.repeat == false){
-            if(e.key == 'x'){
+            if(e.key == 'm' || e.key == 'M' || e.key == 'x'){
                 drawFPV = !drawFPV // turn first person view on or off
             }
             // if(e.key == 'c'){
